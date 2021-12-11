@@ -2,8 +2,8 @@ from os import stat
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Room
-from .serializers import RoomSerializer
+from .models import Hostel
+from .serializers import HostelSerializer
 from rest_framework. response import Response
 from rest_framework import serializers, status
 from django.http import Http404
@@ -13,14 +13,14 @@ class HostelListView(APIView):
 
     def get_hostel(self):
         try:
-            return Room.objects.all()
-        except Room.DoesNotExist:
+            return Hostel.objects.all()
+        except Hostel.DoesNotExist:
             raise Http404
 
     def get(self, request, format=None):
         rooms = self.get_hostel()
-        serializer = RoomSerializer(rooms, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = HostelSerializer(rooms, many=True)
+        return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
     def post(): 
         pass
