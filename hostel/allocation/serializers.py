@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import Hostel, Room, Room_Allocation, Student
+from .models import Hostel, Room, Room_Allocation, Session, Student
 
 class HostelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,6 +22,11 @@ class StudentSerializer(serializers.ModelSerializer):
 class AllocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room_Allocation
+        fields = "__all__"
+
+class SessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Session
         fields = "__all__"
 
 def serializeAllocation(allocation_instace, many=False):
