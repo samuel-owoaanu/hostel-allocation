@@ -1,24 +1,10 @@
 from django.db import models
 from django.db.models.base import ModelState
 from django.db.models.fields.related import ForeignKey
+from account.models import Student
 # from django.db.models.fields.reverse_related import ManyToManyRel
 
 # Create your models here.
-
-class Student(models.Model):
-    matric_number = models.CharField(max_length=100, blank=False)
-    student_firstname = models.CharField(max_length=100, blank=False)
-    student_lastname = models.CharField(max_length=100, blank=False)
-    student_other_name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=255, blank=False)
-    department = models.CharField(max_length=150, blank=False)
-    level = models.IntegerField(blank=False)
-
-    def __str__(self) -> str:
-        return self.student_firstname+" "+self.student_other_name+" "+self.student_lastname
-
-    class Meta:
-        verbose_name_plural = 'Student'
 
 class Hostel_Type(models.Model):
     
@@ -40,7 +26,7 @@ class Hostel(models.Model):
         return self.Hostel_Name+" ("+self.Hostel_Code+")"
 
     class Meta:
-        verbose_name_plural = "Room"
+        verbose_name_plural = "Hostel"
 
 class Room(models.Model):
     Room_Number = models.CharField(max_length=20, blank=False)
@@ -52,11 +38,8 @@ class Room(models.Model):
         return str(self.Room_Number)+" - "+str(self.Hostel_Located)
 
     class Meta:
-        verbose_name_plural = "Session"
+        verbose_name_plural = "Room"
 
-class HostelType(models.Model):
-    hostel_type_name = models.CharField(max_length=50, blank=False)
-    hostel_type_amount = models.DecimalField(max_digits=10, blank=False, decimal_places=2)
 
 class Session(models.Model):
     session_name = models.CharField(max_length=100, blank=False)
@@ -85,10 +68,10 @@ class Session(models.Model):
 
 
 class Room_Allocation(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE )
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=False)
+    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, blank=False)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=False)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE, blank=False)
     # name = models.CharField(max_length=50, blank=False)
     def __str__(self):
         # return self.name
