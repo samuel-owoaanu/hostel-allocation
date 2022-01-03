@@ -34,7 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email_address'), unique=True)
     first_name = models.CharField(max_length=100, blank=False)
     last_name = models.CharField(max_length=100, blank=False)
-    other_name = models.CharField(max_length=100, blank=True, default=None)
+    other_name = models.CharField(max_length=100, blank=True, default=None, null=True)
     date_joined = models.DateTimeField(_('date_joined'), default=timezone.now)
     is_active = models.BooleanField(_('active'), default=False)
     is_staff = models.BooleanField(_('staff'), blank=False)
