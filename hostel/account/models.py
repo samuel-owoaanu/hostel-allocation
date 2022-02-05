@@ -64,3 +64,29 @@ class Student(models.Model):
 
     def __str__(self):
         return self.user.email
+
+class Non_AcademicStaff(models.Model):
+    DEPARTMENT = (
+        ('csc', 'Computer Science'),
+        ('bch', 'BioChemistry'),
+        ('mcb', 'MicroBiology'),
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=30, blank=True, null=True)
+    department = models.CharField(choices=DEPARTMENT, blank=False, max_length=7)
+
+    def __str__(self) -> str:
+        return self.user.email
+
+class AcademicStaff(models.Model):
+    DEPARTMENT = (
+        ('csc', 'Computer Science'),
+        ('bch', 'BioChemistry'),
+        ('mcb', 'MicroBiology'),
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=30, blank=True, null=True)
+    department = models.CharField(choices=DEPARTMENT, blank=False, max_length=7)
+
+    def __str__(self) -> str:
+        return self.user.email
