@@ -28,7 +28,8 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost'
+    'localhost',
+    '127.0.0.1',
 ]
 
 AUTH_USER_MODEL = 'account.User'

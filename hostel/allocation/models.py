@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.base import ModelState
 from django.db.models.fields.related import ForeignKey
+from django.forms import ValidationError
 from account.models import Student
 # from django.db.models.fields.reverse_related import ManyToManyRel
 
@@ -15,11 +16,11 @@ class Hostel_Type(models.Model):
 
 
 class Hostel(models.Model):
-    Hostel_Name = models.CharField(max_length=200, blank=False)
-    Hostel_Type = models.CharField(max_length=200, blank=False)
-    Hostel_Code = models.CharField(max_length=50, blank=False)
-    Hall_Master = models.CharField(max_length=200, blank=False)
-    Chief_Porter = models.CharField(max_length=200, blank=False)
+    hostel_name = models.CharField(max_length=200, blank=False)
+    hostel_type = models.CharField(max_length=200, blank=False)
+    hostel_code = models.CharField(max_length=50, blank=False)
+    hall_master = models.CharField(max_length=200, blank=False)
+    chief_porter = models.CharField(max_length=200, blank=False)
     
 
     def __str__(self) -> str:
@@ -29,14 +30,14 @@ class Hostel(models.Model):
         verbose_name_plural = "Hostel"
 
 class Room(models.Model):
-    Room_Number = models.CharField(max_length=20, blank=False)
-    Bed_Spaces = models.IntegerField()
-    IsFull = models.BooleanField(default=False)
-    Hostel_Located = models.ForeignKey(Hostel, on_delete=models.CASCADE)
+    room_number = models.CharField(max_length=20, blank=False)
+    bed_spaces = models.IntegerField()
+
+    isFull = models.BooleanField(default=False)
+    hostel_located = models.ForeignKey(Hostel, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return str(self.Room_Number)+" - "+str(self.Hostel_Located)
-
     class Meta:
         verbose_name_plural = "Room"
 
@@ -52,21 +53,6 @@ class Session(models.Model):
     class Meta:
         verbose_name_plural = 'Session'
 
-
-# class Payment(models.Model):
-#     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-#     reference_number = models.CharField(max_length=150)
-#     amount = models.FloatField()
-#     payment_status = models.BooleanField(default=False)
-#     if payment_status is False:
-#         status_info = 'UNPAID'
-#     else:
-#         status_info = 'PAID'
-
-#     def __str__(self) -> str:
-#         return self.student + ' ('+self.status_info+')'
-
-
 class Room_Allocation(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=False)
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, blank=False)
@@ -77,6 +63,15 @@ class Room_Allocation(models.Model):
         # return self.name
 
         return str(self.student) + ' ('+str(self.room)+')'## in '+str(self.hostel)+')'
+
+    def save(self, *args, **kwargs):
+        # user = self.student
+        room = self.room
+
+        if room.Bed_Spaces < self.student.id:
+            raise ValidationError("Room is full".format(room.Bed_Spaces))
+
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = 'Allocation'

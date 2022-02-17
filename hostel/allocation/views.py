@@ -339,4 +339,3 @@ class AllocationMGT(APIView):
         pass
     def post(self, request):
         pass
-# class 
