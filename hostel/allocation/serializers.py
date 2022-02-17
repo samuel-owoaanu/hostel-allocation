@@ -9,6 +9,9 @@ class HostelSerializer(serializers.ModelSerializer):
 
 
 class RoomSerializer(serializers.ModelSerializer):
+    hostel = serializers.StringRelatedField()
+    session = serializers.StringRelatedField()
+    student = serializers.StringRelatedField(many=True)
     class Meta:
         model = Room
         fields = "__all__"

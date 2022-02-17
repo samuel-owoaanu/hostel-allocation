@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.db.models.base import ModelState
 from django.db.models.fields.related import ForeignKey
@@ -41,6 +42,7 @@ class Session(models.Model):
         verbose_name_plural = 'Session'
 
 class Room(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     room_number = models.CharField(max_length=20, blank=False)
     bed_spaces = models.IntegerField()
     max_occupancy = models.IntegerField()
@@ -53,13 +55,16 @@ class Room(models.Model):
 
     def save(self, *args, **kwargs):
         room_count = Room.objects.all()
-
-        if len(room_count) >= self.max_occupancy:
+        print(room_count)
+        if len(self.student.all()) >= self.max_occupancy:
             raise ValidationError('Room is full')
 
-        if Student.objects.filter(level=self.student.level).count() > 1:
-            raise ValidationError('This level already exists.')
+        # if Student.objects.filter(level=self.student.level).count() > 1:
+        # print(self.student.all())
+        # if len(self.student.all()) > 1:
+            
+        #     raise ValidationError('This level already exists.')
 
-        super().save(*args, **kwargs)
+        super(Room, self).save(*args, **kwargs)
     class Meta:
         verbose_name_plural = "Room"
