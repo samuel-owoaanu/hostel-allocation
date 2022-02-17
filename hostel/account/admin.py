@@ -11,7 +11,7 @@ class AcademicStaffModel(admin.ModelAdmin):
     search_fields = ('department', 'phone_number',)
 
 class UserModel(admin.ModelAdmin):
-    list_display = ('email', 'first_name', 'last_name',)
+    list_display = ('email', 'first_name', 'last_name', 'other_name',)
     search_fields = ('email', 'first_name', 'last_name',)
 
 class StudentModel(admin.ModelAdmin):
