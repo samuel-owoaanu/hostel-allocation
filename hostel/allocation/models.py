@@ -29,19 +29,6 @@ class Hostel(models.Model):
     class Meta:
         verbose_name_plural = "Hostel"
 
-class Room(models.Model):
-    room_number = models.CharField(max_length=20, blank=False)
-    bed_spaces = models.IntegerField()
-    max_occupancy = models.IntegerField()
-    isFull = models.BooleanField(default=False)
-    hostel_located = models.ForeignKey(Hostel, on_delete=models.CASCADE)
-
-    def __str__(self) -> str:
-        return str(self.room_number)+" - "+str(self.hostel_located)
-    class Meta:
-        verbose_name_plural = "Room"
-
-
 class Session(models.Model):
     session_name = models.CharField(max_length=100, blank=False)
     session_start = models.DateField(blank=False)
@@ -53,30 +40,26 @@ class Session(models.Model):
     class Meta:
         verbose_name_plural = 'Session'
 
-class Room_Allocation(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=False)
-    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, blank=False)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=False)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE, blank=False)
-    # name = models.CharField(max_length=50, blank=False)
-    def __str__(self):
-        return str(self.student)
+class Room(models.Model):
+    room_number = models.CharField(max_length=20, blank=False)
+    bed_spaces = models.IntegerField()
+    max_occupancy = models.IntegerField()
+    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    student = models.ManyToManyField(Student)
+
+    def __str__(self) -> str:
+        return str(self.room_number)
 
     def save(self, *args, **kwargs):
-        # if self.room:
-        room_count = Room_Allocation.objects.all()
-        print(room_count)
-        print(len(room_count))
-        print(self.room.max_occupancy)
+        room_count = Room.objects.all()
 
-        if len(room_count) >= self.room.max_occupancy:
-            raise ValidationError('Room is full...')
-        
+        if len(room_count) >= self.max_occupancy:
+            raise ValidationError('Room is full')
+
         if Student.objects.filter(level=self.student.level).count() > 1:
-            print(type(Student.objects.filter(level=self.student.level).count()))
             raise ValidationError('This level already exists.')
 
         super().save(*args, **kwargs)
-
     class Meta:
-        verbose_name_plural = 'Allocation'
+        verbose_name_plural = "Room"
