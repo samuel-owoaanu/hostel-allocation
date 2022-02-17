@@ -63,10 +63,20 @@ class Room_Allocation(models.Model):
         return str(self.student) + ' ('+str(self.room)+')'## in '+str(self.hostel)+')'
 
     def save(self, *args, **kwargs):
-        if self.room:
-            if self.student.id > self.room.max_occupancy:
-                raise ValidationError('Room is full')
+        # if self.room:
+        # if self.student.id > self.room.max_occupancy:
+        #     print(self.student.id)
+        #     raise ValidationError('Room is full...')
+
+        # room_count = Student.objects.all()
+        # print(room_count)
+        # if room_count.count() > self.room.max_occupancy:
+        #     raise ValidationError('Room is full...')
         
+        if Student.objects.filter(level=self.student.level).count() > 1:
+            print(type(Student.objects.filter(level=self.student.level).count()))
+            raise ValidationError('This level already exists.')
+
         super().save(*args, **kwargs)
 
     class Meta:

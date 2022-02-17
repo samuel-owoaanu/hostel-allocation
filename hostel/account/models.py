@@ -59,7 +59,7 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     mat_no = models.CharField(max_length=30, blank=True, null=True, unique=True)
     department = models.CharField(choices=DEPARTMENT, blank=False, max_length=7)
-    level = models.CharField(max_length=6, blank=False)
+    level = models.IntegerField(blank=False)
     reg_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

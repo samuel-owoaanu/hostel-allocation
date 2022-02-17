@@ -5,7 +5,7 @@ from .models import *
 # password - admin12345
 # Register your models here.
 class RoomModel(admin.ModelAdmin):
-    list_display = ('room_number', 'bed_spaces', 'hostel_located',)
+    list_display = ('room_number', 'bed_spaces', 'max_occupancy', 'hostel_located',)
     
 class RoomAllocationAdmin(admin.ModelAdmin):
     list_display = ('student', 'room', 'hostel', 'session',)
